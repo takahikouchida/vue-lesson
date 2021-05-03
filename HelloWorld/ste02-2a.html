@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<meta charset="utf-8">
+<title>データ入力</title>
+
+
+<div id="app">
+    <form class="inputArea">
+        <label>ニックネーム</label>
+        <input v-model="nickname">
+        <label >Eメール</label>
+        <input v-model="email">
+    </form>
+</div>
+
+<script src="https://unpkg.com/vue@next"></script>
+<script>
+    const app = Vue.createApp({
+        data:()=>({
+            nickname : '',
+            email : '',
+        })
+    });
+    app.mount('#app');
+
+    /**
+     * 実行後、入力値を変更して、Chromeデバッグツールで以下のコマンドでデータバインディングがされていることを確認する
+
+     console.log(app._container._vnode.component.data.nickname);
+     console.log(app._container._vnode.component.data.email);
+
+     */
+
+
+</script>
+
+
+
+</html>
