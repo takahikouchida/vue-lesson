@@ -1,0 +1,88 @@
+<!--
+表示データの絞り込み
+computed プロパティの利用
+
+computed はオブジェクト内容に変更があった場合のみ実行される
+
+filteredUsers を methodsに移動するとテキストボックっすの値が変更されるたびに実行されてしまうので注意
+
+-->
+<!DOCTYPE html>
+<html lang="ja">
+<meta charset="utf-8">
+
+<div id="app">
+    <form class="inputArea">
+        <label>ニックネーム</label>
+        <input v-model="nickname">
+        <label >Eメール</label>
+        <input v-model="email">
+    </form>
+
+    <div class="previewArea">
+        <p>プレビュー</p>
+        <label>ニックネーム</label>
+        <input :value="nickname" readonly>
+        <label >Eメール</label>
+        <input :value="email" readonly>
+    </div>
+
+    <div class="buttonArea">
+        <button v-on:click="saveUser">ユーザーを登録する</button>
+    </div>
+
+    <div>
+        <table>
+            <thead>
+            <th>ニックネーム</th>
+            <th>メールアドレス</th>
+            </thead>
+            <tbody>
+            <tr v-for="user in filteredUsers()">
+                <td>{{ user.nickname}}</td>
+                <td>{{ user.email }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <label>リストをニックネームで絞り込む</label>
+        <input v-model="nicknameFilter">
+    </div>
+
+</div>
+
+
+
+
+
+<script src="https://unpkg.com/vue@next"></script>
+
+<script>
+    const app = Vue.createApp({
+        data: ()=>({
+            users: [],
+            nickname: '',
+            email: '',
+            nicknameFilter: '',
+        }),
+        methods: {
+            saveUser: function () {
+                let user = {
+                    nickname: this.nickname,
+                    email: this.email
+                };
+                this.users.push(user);
+                alert("ニックネーム" + this.nickname + " Eメール" + this.email + "を登録しました。");
+            },
+        },
+        computed: {
+            filteredUsers: function(){
+                console.log('filteredUsers called.');
+                return this.users.filter(user => user.nickname.includes(this.nicknameFilter));
+            }
+        }
+    });
+    app.mount('#app');
+</script>
