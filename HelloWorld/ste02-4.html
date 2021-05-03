@@ -1,0 +1,73 @@
+<!--
+ボタンのクリックで配列にデータ追加
+v-on
+v-bind
+
+v-on:click="saveUser"
+でsaveUserメソッドを実行する
+
+-->
+
+<!DOCTYPE html>
+<html lang="ja">
+<meta charset="utf-8">
+<title>データ入力</title>
+
+
+<div id="app">
+    <div class="buttonArea">
+        <button v-on:click="saveUser">ユーザーを登録する</button>
+    </div>
+
+    <form class="inputArea">
+        <label>ニックネーム</label>
+        <input v-model="nickname">
+        <label >Eメール</label>
+        <input v-model="email">
+    </form>
+
+    <div class="previewArea">
+
+        <label>ニックネーム</label>
+        <input :value="nickname" readonly>
+        <label >Eメール</label>
+        <input :value="email" readonly>
+    </div>
+
+
+</div>
+
+<script src="https://unpkg.com/vue@next"></script>
+<script>
+    const app = Vue.createApp({
+        data:()=>({
+            users: [],
+            nickname : '',
+            email : '',
+        }),
+        methods: {
+            saveUser: function(){
+                let user = {
+                    nickname: this.nickname,
+                    email: this.email
+                };
+                this.users.push(user);
+                alert("ニックネーム"+this.nickname+" Eメール"+this.email+"を登録しました。");
+            }
+        }
+    });
+    app.mount('#app');
+
+    /**
+     * 実行後、入力値を変更すると、previewAreaの中身が自動的に変更される
+     *
+     console.log(app._container._vnode.component.data.users);
+     *
+     */
+
+
+</script>
+
+
+
+</html>
