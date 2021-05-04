@@ -1,10 +1,7 @@
 <!--
-表示データの絞り込み
-computed プロパティの利用
+データ更新
 
-computed はオブジェクト内容に変更があった場合のみ実行される
-
-filteredUsers を methodsに移動するとテキストボックっすの値が変更されるたびに実行されてしまうので注意
+vu3対応のためrefバインドを利用している
 
 -->
 <!DOCTYPE html>
@@ -38,8 +35,11 @@ filteredUsers を methodsに移動するとテキストボックっすの値が�
             <th>メールアドレス</th>
             </thead>
             <tbody>
-            <tr v-for="user in filteredUsers">
-                <td>{{ user.nickname}}</td>
+            <tr v-for="(user,index) in filteredUsers">
+                <td>
+                    <span v-if="!user.editable" @click="edit(user,index)">{{user.nickname}} | {{user.editable}}</span>
+                    <input v-show="user.editable" v-model="user.nickname" @blur="user.editable = false" :ref="editNickname" />
+                </td>
                 <td>{{ user.email }}</td>
             </tr>
             </tbody>
@@ -66,16 +66,39 @@ filteredUsers を methodsに移動するとテキストボックっすの値が�
             nickname: '',
             email: '',
             nicknameFilter: '',
+            itemRefs: [],
         }),
         methods: {
             saveUser: function () {
                 let user = {
                     nickname: this.nickname,
-                    email: this.email
+                    email: this.email,
+                    editable : false
                 };
                 this.users.push(user);
                 alert("ニックネーム" + this.nickname + " Eメール" + this.email + "を登録しました。");
             },
+            edit: function(user,index){
+                console.log(user);
+                user.editable = true;
+                this.$nextTick(function(){
+                    console.log(this.itemRefs);
+                    this.itemRefs[index].focus();
+//                    this.$refs.editNickname[index].focus();
+                });
+                console.log(user);
+            },
+            editNickname(el){
+                if(el){
+                    this.itemRefs.push(el);
+                }
+            }
+        },
+        beforeUpdate() {
+            this.itemRefs = []
+        },
+        updated() {
+            console.log(this.itemRefs)
         },
         computed: {
             filteredUsers: function(){
